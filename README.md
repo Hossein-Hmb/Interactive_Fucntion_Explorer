@@ -21,8 +21,7 @@ All visualizations are interactive, allowing for real-time parameter adjustments
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/wigner-explorer.git
-cd wigner-explorer
+git clone https://github.com/yourusername/wigner-explorer.git && cd wigner-explorer
 ```
 
 2. Install required packages:
