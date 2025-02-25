@@ -55,3 +55,7 @@ The application will start and automatically open in your default web browser.
 - Try both surface and contour plot types to view the data differently
 - For better performance with complex calculations, reduce the resolution
 - Hover over plot points to see exact values
+
+## Pictures
+<img width="1456" alt="image" src="https://github.com/user-attachments/assets/ee5924dd-f536-45c9-b476-cb322ad7a439" />
+<img width="1397" alt="image" src="https://github.com/user-attachments/assets/a04be4ff-3922-4383-a145-2661241b9527" />
