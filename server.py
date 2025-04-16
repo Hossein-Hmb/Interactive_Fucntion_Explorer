@@ -48,9 +48,6 @@ def proxy(path=''):
 
 
 if __name__ == '__main__':
-    # Start Streamlit in the background
-    subprocess.Popen([
-        'streamlit', 'run', 'app.py', '--server.port', '8501'
-    ])
+
     # Start Flask for Heroku
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
