@@ -9,6 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
 import plotly.graph_objects as go
 
+
 # Set the configuration for the Streamlit page
 st.set_page_config(page_title="Plot Your Equation", layout="wide")
 
@@ -20,7 +21,7 @@ st.sidebar.header("Parameters")
 # Dropdown menu for selecting the type of equation to explore
 equation_type = st.sidebar.selectbox(
     "Select Your Eqaution",
-    ["Wigner Function (n)", "Gaussian Wigner Function",
+    ["Wigner Function (n) Fock States", "Gaussian Wigner Function 2D",
      "Coupling Matrix", "Gaussian Wigner Function 4D", "Wasserstein Distance"]
 )
 
@@ -221,12 +222,12 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("Equation Info")
 
 # Display information about the selected equation type in the sidebar
-if equation_type == "Wigner Function (n)":
+if equation_type == "Wigner Function (n) Fock States":
     st.sidebar.latex(
         r"W_n(x,p) = \frac{(-1)^n}{\pi} e^{-(x^2+p^2)} L_n(2(x^2+p^2))")
     st.sidebar.write("where Lₙ is the Laguerre polynomial of degree n")
 
-elif equation_type == "Gaussian Wigner Function":
+elif equation_type == "Gaussian Wigner Function 2D":
     st.sidebar.latex(
         r"W(r) = \frac{1}{2\pi\sqrt{\det(\gamma)}} e^{-\frac{1}{2}r^T \gamma^{-1} r}")
     st.sidebar.write("where r = (x,p) and γ is the covariance matrix")
@@ -257,7 +258,7 @@ with st.sidebar.expander("Instructions"):
     """)
 
 # Main content area for displaying plots and results
-if equation_type == "Wigner Function (n)":
+if equation_type == "Wigner Function (n) Fock States":
     # Create two columns for layout
     col1, col2 = st.columns([1, 2])
 
@@ -329,7 +330,7 @@ if equation_type == "Wigner Function (n)":
                 mime="text/csv"
             )
 
-elif equation_type == "Gaussian Wigner Function":
+elif equation_type == "Gaussian Wigner Function 2D":
     # Create two columns for layout
     col1, col2 = st.columns([1, 2])
 
