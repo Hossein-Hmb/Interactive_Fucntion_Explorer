@@ -2,7 +2,13 @@
 
 An interactive application for exploring and visualizing quantum Wigner functions and related quantum state representations.
 
+## Landing Page
+
 https://interactive-fucntion-explorer.vercel.app/
+
+## Streamlit App
+
+https://interactive-quantum-function-dcfef5861490.herokuapp.com/
 
 ## Overview
 
