@@ -7,7 +7,7 @@
     <style>
       body {
         margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Orbitron", sans-serif;
         background-color: #f7f9fc;
         color: #333;
       }
@@ -16,14 +16,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 2rem;
+        padding: 1rem 20rem;
         background-color: #ffffff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
 
       .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
+        font-size: 2rem;
+        font-weight: lighter;
         color: #0072ff;
         text-decoration: none;
       }
@@ -32,6 +32,10 @@
         text-decoration: none;
         color: #333;
         font-weight: 500;
+        border: #0072ff 2px solid;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
       }
 
       .hero {
@@ -40,8 +44,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 4rem 2rem;
-        background-color: #eaf3ff;
+        padding: 2rem 2rem;
       }
 
       .hero img {
@@ -52,7 +55,8 @@
       }
 
       .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
+        font-weight: lighter;
         margin-bottom: 1rem;
         color: #1a1a1a;
       }
@@ -74,14 +78,29 @@
       }
 
       .content p {
+        font-size: 1.2rem;
         margin-bottom: 1rem;
-        line-height: 1.6;
+        line-height: 2rem;
+      }
+
+      .getting-started-step {
+        margin-bottom: 2rem;
+      }
+
+      .gifs {
+        display: block;
+        max-width: 100%;
+        margin: 0.5rem 0;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        clip-path: inset(1%);
       }
     </style>
   </head>
   <body>
     <nav class="navbar">
-      <a href="#" class="logo">YourApp</a>
+      <a href="#" class="logo">FunctionVisualizer</a>
       <a
         href="https://interactive-quantum-function-dcfef5861490.herokuapp.com/"
         class="nav-link"
@@ -90,33 +109,60 @@
     </nav>
 
     <section class="hero">
-      <h1>Welcome to YourApp</h1>
-      <p>
-        Discover insights, visualize data, and streamline your workflow with our
-        easy-to-use platform.
-      </p>
-      <img
-        src="https://via.placeholder.com/500x300.png?text=Your+App+Hero+Image"
-        alt="Hero Image" />
+      <h1>Welcome to FunctionVisualizer</h1>
+      <p>Plot your equations and visualize your functions in real-time</p>
+      <img src="/images/platfrom.png" alt="Hero Image" />
     </section>
 
     <section class="content">
-      <h2>Getting Started</h2>
-      <p>
-        1. Log in to the platform using your Google account or custom
-        credentials.
-      </p>
-      <p>2. Upload your data or connect a source.</p>
-      <p>3. Use the tools provided to analyze, visualize, and gain insights.</p>
-      <p>4. Save your work and share your results with your team.</p>
-
       <h2>Purpose</h2>
       <p>
-        This platform is built to simplify data exploration and visualization,
-        especially for users who value speed, interactivity, and simplicity.
-        Whether you're a researcher, analyst, or student, YourApp helps you get
-        answers faster.
+        The platform is designed to help you plot and visualize your
+        mathematical functions easily. Whether you're a student, educator, or
+        professional, FunctionVisualizer helps you understand complex equations
+        and their graphical representations.
       </p>
+      <br />
+      <h2>Getting Started</h2>
+      <div class="getting-started-step">
+        <p>
+          1. From the left hand side you can select the type of function you
+          want to plot.
+        </p>
+        <img
+          src="/images/choose_function.gif"
+          alt="Choose Equation"
+          class="gifs" />
+      </div>
+      <div class="getting-started-step">
+        <p>2. Modify the different variables of your equation.</p>
+        <img src="/images/modify_variables.gif"" alt="Modify Variables GIF"
+        class="gifs" />
+      </div>
+      <div class="getting-started-step">
+        <p>3. Look at your plot from different angles.</p>
+        <img src="/images/move_plot.gif" alt="Move the Plot GIF" class="gifs" />
+      </div>
+    </section>
+
+    <section class="content">
+      <h2>Try it For Yourself</h2>
+      <p>
+        Ready to explore your functions? Click the button below to visit the
+        platform.
+      </p>
+      <a
+        href="https://interactive-quantum-function-dcfef5861490.herokuapp.com/"
+        class="btn"
+        style="
+          padding: 0.5rem 1rem;
+          background-color: #007bff;
+          color: #fff;
+          text-decoration: none;
+          border-radius: 4px;
+        "
+        >Go to Platform</a
+      >
     </section>
   </body>
 </html>
