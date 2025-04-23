@@ -25,9 +25,8 @@ equation_type = st.sidebar.selectbox(
      "Coupling Matrix", "Gaussian Wigner Function 4D", "Wasserstein Distance"]
 )
 
+
 # Define the Wigner function for a quantum harmonic oscillator
-
-
 def wigner_function(n, x, p):
     """
     EN: Calculates the Wigner function for a quantum harmonic oscillator using Laguerre polynomials. 
@@ -47,9 +46,8 @@ def wigner_function(n, x, p):
     # Return the Wigner function value
     return prefactor * exponent * laguerre_term
 
+
 # Define the 4D Gaussian Wigner function for a bipartite quantum system
-
-
 def wigner_gaussian4D(x1, p1, x2, p2, gamma):
     """
     EN: Computes the 4D Gaussian Wigner function for a bipartite (two-mode) quantum system characterized by a 4x4 covariance matrix gamma. 
@@ -112,9 +110,8 @@ def wigner_gaussian(r, covar_mx):
     # Return the Wigner function value
     return norm * np.exp(exponent)
 
+
 # Check if a 4x4 covariance matrix satisfies the uncertainty principle
-
-
 def uncertainty4D(gamma):
     """
     EN: Checks whether the input covariance matrix gamma respects the generalized uncertainty principle 
@@ -155,9 +152,8 @@ def uncertainty4D(gamma):
     # Allow a tiny numerical tolerance
     return np.all(eigenvals > -1e-14)
 
+
 # Check if a 2x2 covariance matrix satisfies the uncertainty principle
-
-
 def uncertainty2D(matrix_covariance):
     # Define the imaginary unit
     i = cmath.sqrt(-1)
@@ -171,9 +167,8 @@ def uncertainty2D(matrix_covariance):
     eigenvals = np.linalg.eigvals(M)
     return np.all(eigenvals >= 0)
 
+
 # Calculate the minimal coupling matrix for two 2x2 covariance matrices
-
-
 def minimal_coupling(A, B):
     """
     Given two 2x2 covariance matrices A and B (which must be valid
@@ -200,9 +195,8 @@ def minimal_coupling(A, B):
         # Display a message if matrices do not respect the uncertainty principle
         st.write("Your Matrix Doesn't Respect the Uncertainty Relation 1")
 
+
 # Calculate the Wasserstein distance between two covariance matrices
-
-
 def wasserstein_distance(matrix_A, matrix_B):
     # Find the optimal coupling matrix X
     matrix_X = minimal_coupling(matrix_A, matrix_B)
@@ -338,8 +332,8 @@ elif equation_type == "Gaussian Wigner Function 2D":
     with col1:
         st.subheader("Covariance Matrix")
         # Sliders for setting the covariance matrix elements
-        covar_xx = st.slider("Var(x)", 0.1, 3.0, 1.0, 0.1)
-        covar_pp = st.slider("Var(p)", 0.1, 3.0, 1.0, 0.1)
+        covar_xx = st.slider("Var(x)", -3.0, 3.0, 0.5, 0.1)
+        covar_pp = st.slider("Var(p)", -3.0, 3.0, 0.5, 0.1)
         covar_xp = st.slider("Cov(x,p)", -1.0, 1.0, 0.0, 0.1)
 
         # Slider for selecting the resolution of the plot
@@ -411,14 +405,14 @@ elif equation_type == "Coupling Matrix":
     with col1:
         st.subheader("State 1 Covariance Matrix")
         # Sliders for setting the covariance matrix elements of state 1
-        gamma1_xx = st.slider("γ1 Var(x)", 0.1, 3.0, 1.2, 0.1)
-        gamma1_pp = st.slider("γ1 Var(p)", 0.1, 3.0, 1.1, 0.1)
+        gamma1_xx = st.slider("γ1 Var(x)", -3.0, 3.0, 0.5, 0.1)
+        gamma1_pp = st.slider("γ1 Var(p)", -3.0, 3.0, 0.5, 0.1)
         gamma1_xp = st.slider("γ1 Cov(x,p)", -1.0, 1.0, 0.5, 0.1)
 
         st.subheader("State 2 Covariance Matrix")
         # Sliders for setting the covariance matrix elements of state 2
-        gamma2_xx = st.slider("γ2 Var(x)", 0.1, 3.0, 1.0, 0.1)
-        gamma2_pp = st.slider("γ2 Var(p)", 0.1, 3.0, 1.3, 0.1)
+        gamma2_xx = st.slider("γ2 Var(x)", -3.0, 3.0, 0.5, 0.1)
+        gamma2_pp = st.slider("γ2 Var(p)", -3.0, 3.0, 0.5, 0.1)
         gamma2_xp = st.slider("γ2 Cov(x,p)", -1.0, 1.0, 0.3, 0.1)
 
         st.subheader("Coupling Matrix")
