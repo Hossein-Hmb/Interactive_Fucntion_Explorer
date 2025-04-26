@@ -175,7 +175,41 @@
               quantum states or modes. It is essential for understanding the
               dynamics of quantum systems and their evolution over time.
             </p>
-            <img src="/images/coupling.png" alt="Coupling Matrix" />
+            <p>
+              Let us assume we have two states $A$ and $B$ and they respect the
+              uncertainty principle given by:
+            </p>
+            <p>
+              \[A^\pm = A \pm \frac{i\Omega}{2}, \Omega = \begin{bmatrix}0 & 1\\
+              -1 & 0 \end{bmatrix}\]
+            </p>
+            <p>
+              The coupling matrix is a $4\times4$ matrix that describes the
+              interaction between the two states. It is defined as:
+            </p>
+            <p>
+              \[ \gamma\Pi = \begin{bmatrix} A & X^T\\ X & B \end{bmatrix} \]
+            </p>
+            <p>
+              where $X$ is the covariance matrix of the two states given by:
+            </p>
+            <p>\[|X| \le \sqrt{\sqrt{A^\pm}\times B\times\sqrt{A^\pm}}\]</p>
+            <p>
+              With the coupling matrix, we can analyse the interactions between
+              the two states and how they influence each other. It shows the
+              degree to which changes in one state affects the other state.
+            </p>
+            <p>
+              The image below shows a 3D plot of a coupling matrix. The two
+              states $A$ and $B$ each respect the uncertainty principle. The $X$
+              and $Y$ axes represent the basis states, and the $Z$ axis
+              represents the coupling strength between the two states. The color
+              gradient indicates the degree of coupling, with darker colors
+              representing stronger interactions.
+            </p>
+            <p>
+              <img src="/images/coupling.png" alt="Coupling Matrix" />
+            </p>
           </section>
 
           <section id="wasserstein">
@@ -186,8 +220,27 @@
               mechanics, it can be used to quantify the differences between
               quantum states represented by their Wigner functions.
             </p>
-            <img src="/images/wasserstein.png" alt="Wasserstein Distance" />
+            <p>
+              \[ W(\rho_A, \rho_B)^2 = \frac{1}{2}TrA+\frac{1}{2}TrB-Tr[X] \]
+            </p>
+            <p>
+              where $A$ and $B$ are the covariance matrices of the two states,
+              and $X$ is given by:
+            </p>
+            <p>\[|X| \le \sqrt{\sqrt{A^\pm}\times B\times\sqrt{A^\pm}}\]</p>
+            <p>
+              The Wasserstein distance is a powerful tool for comparing quantum
+              states and analyzing their properties. It is particularly useful
+              in quantum information theory and quantum optics. For example, the
+              Wasserstein distance can demonstrate the optimal path between two
+              states $A$ and $B$ where the value of the cost function is at a
+              minimum.
+            </p>
+            <p>
+              <img src="/images/wasserstein.png" alt="Wasserstein Distance" />
+            </p>
           </section>
+
           <section id="try-it-for-yourself">
             <h1>Try it For Yourself</h1>
             <p>

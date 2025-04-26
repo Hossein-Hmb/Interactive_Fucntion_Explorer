@@ -58,18 +58,18 @@ def wigner_gaussian4D(x1, p1, x2, p2, gamma):
     La fonction évalue la fonction de Wigner à un point spécifique (x1, p1, x2, p2) de l’espace de phase à quatre dimensions, 
     en supposant que le système satisfait au principe d’incertitude quantique.
     """
+    # Create vector r from the input coordinates
+    vec_r = np.array([[x1, p1, x2, p2]]).reshape(-1, 1)
+
+    # Transpose of vec_r
+    vec_r_t = np.transpose(vec_r)
+
+    # Calculate the determinant and inverse of the covariance matrix gamma
+    det = np.linalg.det(gamma)
+    inv = np.linalg.inv(gamma)
+
     # Check if the covariance matrix satisfies the uncertainty principle
-    if uncertainty4D(gamma):
-        # Create vector r from the input coordinates
-        vec_r = np.array([[x1, p1, x2, p2]]).reshape(-1, 1)
-
-        # Transpose of vec_r
-        vec_r_t = np.transpose(vec_r)
-
-        # Calculate the determinant and inverse of the covariance matrix gamma
-        det = np.linalg.det(gamma)
-        inv = np.linalg.inv(gamma)
-
+    if uncertainty4D(gamma) and det >= 0.25:
         # Calculate the normalization factor
         norm = 1 / ((2 * np.pi)**2 * np.sqrt(det))
         # Calculate the exponent term
@@ -85,12 +85,11 @@ def wigner_gaussian4D(x1, p1, x2, p2, gamma):
         return norm * np.exp(exponent)
     else:
         # Return a message if the covariance matrix does not satisfy the uncertainty principle
-        return "Gamma doesn't respect uncertainty relation!"
+        return "Gamma doesn't respect uncertainty relation or det(gamma) < 1/4!"
+
 
 # Define the 2D Gaussian Wigner function
-
-
-def wigner_gaussian(r, covar_mx):
+def wigner_gaussian(x1, p1, gamma):
     """
     EN: Computes the value of the 2D Gaussian Wigner function at a given point r = (x, p), 
     using a 2x2 covariance matrix that describes the quantum state's spread and correlation in phase space. 
@@ -100,15 +99,29 @@ def wigner_gaussian(r, covar_mx):
     en utilisant une matrice de covariance 2x2 décrivant l’étendue et les corrélations de l’état quantique dans l’espace de phase. 
     Cette fonction est utilisée pour modéliser des états gaussiens à un seul mode.
     """
+    # Create vector r from the input coordinates
+    vec_r = np.array([[x1, p1]]).reshape(-1, 1)
+
+    # Transpose of vec_r
+    vec_r_t = np.transpose(vec_r)
+
     # Calculate the determinant and inverse of the covariance matrix
-    det = np.linalg.det(covar_mx)
-    inv = np.linalg.inv(covar_mx)
-    # Calculate the normalization factor
-    norm = 1 / (2 * np.pi * np.sqrt(det))
-    # Calculate the exponent term
-    exponent = -0.5 * r @ inv @ r
-    # Return the Wigner function value
-    return norm * np.exp(exponent)
+    det = np.linalg.det(gamma)
+    inv = np.linalg.inv(gamma)
+
+    # Check if the covariance matrix satisfies the uncertainty principle
+    # For 2D, the uncertainty relation is det(gamma) >= 1/4
+    if uncertainty2D(gamma) and det >= 0.25:
+        # Calculate the normalization factor
+        norm = 1 / (2 * np.pi * np.sqrt(det))
+        # Calculate the exponent term
+        exponent = -0.5 * vec_r_t @ inv @ vec_r
+        # Return the Wigner function value
+        return norm * np.exp(exponent)
+
+    else:
+        # Return a message if the covariance matrix does not satisfy the uncertainty principle
+        return "Gamma doesn't respect uncertainty relation or det(gamma) < 1/4!"
 
 
 # Check if a 4x4 covariance matrix satisfies the uncertainty principle
@@ -234,6 +247,13 @@ elif equation_type == "Gaussian Wigner Function 4D":
 elif equation_type == "Coupling Matrix":
     st.sidebar.write(
         "The coupling matrix represents the correlation between two Gaussian quantum states in phase space.")
+
+elif equation_type == "Wasserstein Distance":
+    st.sidebar.latex(
+        r"W(\gamma_1, \gamma_2) = \frac{1}{2} \text{Tr}(\gamma_1) + \frac{1}{2} \text{Tr}(\gamma_2) - \text{Tr}(X)")
+    st.sidebar.write(
+        "The Wasserstein distance measures the difference between two covariance matrices.")
+
 
 # Add a section for custom equation input (coming soon)
 st.sidebar.markdown("---")
@@ -371,8 +391,9 @@ elif equation_type == "Gaussian Wigner Function 2D":
         Z = np.zeros_like(X)
         for i in range(resolution):
             for j in range(resolution):
-                r = np.array([X[i, j], P[i, j]])
-                Z[i, j] = wigner_gaussian(r, covar_mx)
+                coords = {"x": X[i, j], "p": P[i, j]}
+                # Calculate the Wigner function value at the current coordinates
+                Z[i, j] = wigner_gaussian(coords["x"], coords["p"], covar_mx)
 
         # Plot the Wigner function as a surface or contour plot
         if plot_type == "Surface":
