@@ -55,10 +55,11 @@
           <section id="welcome">
             <h1>Welcome</h1>
             <p>
-              The platform is designed to help you plot and visualize your
-              mathematical functions easily. Whether you're a student, educator,
-              or professional, FunctionVisualizer helps you understand complex
-              equations and their graphical representations.
+              The platform is designed to help you plot and visualize some
+              mathematical functions for quantum states in the phase-space
+              framework. Whether you're a student, educator, or professional,
+              FunctionVisualizer helps you understand complex equations and
+              their graphical representations.
             </p>
           </section>
 
@@ -91,27 +92,35 @@
           <section id="uncertainty">
             <h1>Uncertainty Principle</h1>
             <p>
-              The uncertainty principle is an important concept in quantum
-              mechanics. This principle states that one cannot know the exact
-              measurement of the position $x$ and momentum $p$ of a particle.
-              You can only know one or the other. If for example you know the
-              momentum and you try to find the position using wave equation, you
-              get a probability of where that particle might have been at time
-              $t$.
+              All functions that are plotted must represent physical states. As
+              such, they have to obey the uncertainty principle. The uncertainty
+              principle is an important concept in quantum mechanics. This
+              principle, originally formulated by Heisenberg, states that one
+              cannot know the exact measurement of the position $x$ and momentum
+              $p$ of a particle. There is a limit to the precision expressed
+              through the inequality
             </p>
             <p>\[ \Delta x \Delta p \geq \frac{\hbar}{2} \]</p>
+            <p>
+              If for example you know the momentum and you try to find the
+              position you do not get the exact value, but only a probability of
+              where that particle might have been at time $t$.
+            </p>
           </section>
 
           <section id="wigner">
             <h1>Wigner Function</h1>
             <p>
               The Wigner function is a quasi-probability distribution function
-              used in quantum mechanics to represent the quantum state of a
-              system. It provides a way to visualize the phase space of a
-              quantum system, allowing for the analysis of its properties and
-              dynamics. The Wigner function is defined in terms of the position
-              $x$ and momentum $p$ variables, and it can take on negative
-              values, which is a characteristic feature of quantum mechanics.
+              used in quantum mechanics to represent a quantum state of a system
+              in the phase space. It provides a way to visualize the probability
+              of measuring the position or the momentum of a quantum system,
+              allowing for the analysis of its properties and dynamics. This
+              distribution is not a true distribution as it can become negative,
+              showcasing here a quantum feature of some states. A Fock state is
+              a quantum state which has exactly $n$ photons (or quanta of
+              light). They are represented by the following Wigner function
+              where $L_n(x)$ are the Laguerre polynomials.
             </p>
             <p>
               \[ W_n(x,p) = \frac{(-1)^n}{\pi}\,e^{-(x^2 + p^2)}\,L_n\bigl(2(x^2
@@ -126,8 +135,21 @@
             <p>
               The Gaussian Wigner function is a specific form of the Wigner
               function that describes a Gaussian state in phase space. It is
-              characterized by its mean position $x$ and momentum $p$. The
-              Gaussian Wigner function is defined :
+              completely characterized by the first moments (average value of
+              position $\langle x \rangle$ and momentum $\langle p \rangle$) and
+              covariance matrix $\gamma$ whose elements are given by:
+            </p>
+            <p>
+              \[ \gamma _{ij} = \frac{1}{2}\langle\{\hat{r}_i,\hat{r}_j\}\rangle
+              - \langle{\hat{r}_i}\rangle\langle{\hat{r}_j}\rangle.\]
+            </p>
+            <p>
+              Here, {.} stand for the anti-commutator and $r$ is a column vector
+              of the position and momentum variables of a particle, that is $r =
+              (x, p)^T$. On this platform, we will only consider states that are
+              centered at the origin such that $\langle{x}\rangle =
+              \langle{p}\rangle = 0$. Therefore, the Gaussian Wigner function is
+              defined as
             </p>
             <p>
               \[ W(r) =
@@ -135,32 +157,41 @@
               \]
             </p>
             <p>
-              where $r$ is a column vector of the position and momentum
-              variables of two particles $A$ and $B$, and $\gamma$ is the
-              covariance matrix. Note that $\gamma$ must satisfy the uncertainty
-              principle, which states that the determinant of the covariance
-              matrix must be greater than or equal to $\frac{\hbar^2}{4}$.
-              <img
-                src="/images/gaussian.png"
-                alt="Gaussian Wigner Function 2D" />
+              Note that $\gamma$ must satisfy the uncertainty principle of
+              Heisenberg, but also its improved version from
+              Robertson-Schrödinger, which states that the determinant of the
+              covariance matrix must be greater than or equal to
+              $\frac{\hbar^2}{4}$. This uncertainty principle can also be
+              written as
             </p>
+            <p>
+              \[ \gamma \pm \frac{i\hbar\Omega}{2} \geq 0 \quad \text{where}
+              \quad \Omega = \begin{bmatrix}0 & 1\\-1 & 0\end{bmatrix} \]
+            </p>
+            <p>
+              Note that on this platform, we chose to put $\hbar = 1$ and the
+              commutator of $x$ and $p$ is given by $[x, p] = i.$
+            </p>
+            <img src="/images/gaussian.png" alt="Gaussian Wigner Function 2D" />
           </section>
 
           <section id="gaussian4d">
             <h1>Gaussian Wigner Function 4D</h1>
             <p>
               The Gaussian Wigner function in four dimensions extends the
-              concept of the 2D Gaussian Wigner function to higher dimensions.
-              It is used to represent more complex quantum states and their
-              interactions. The 4D Gaussian Wigner function is defined similarly
-              to the 2D case, but it incorporates two states $A$ and $B$, each
-              represented by a $2\times2$ covariance matrix. As such, $\gamma$
-              is now a $4\times4$ matrix and the vector $r$ is 4 dimensional.
-              The Wigner function is given by:
+              concept of the 2D Gaussian Wigner function from 1 particle to 2
+              particles. It is used to represent more complex quantum states and
+              their interactions. The 4D Gaussian Wigner function is defined
+              similarly to the 2D case, but it describes a two states-system $A$
+              and $B$, each represented by a $2\times2$ covariance matrix. As
+              such, the global covariance matrix $\gamma$, describing the
+              Gaussian function, is now a $4\times4$ matrix and the vector $r =
+              (x_A, p_A, x_B, p_B)^T$ is 4 dimensional. Still considering states
+              centered at the origin, the Wigner function is given by:
             </p>
             <p>
               \[ W(r) =
-              \frac{1}{2\pi\sqrt{\det(\gamma)}}\,e^{-\tfrac12\,r^T\gamma^{-1}r}
+              \frac{1}{(2\pi)^{2}\sqrt{\det(\gamma)}}\,e^{-\tfrac12\,r^T\gamma^{-1}r}
               \]
             </p>
             <img
@@ -171,41 +202,47 @@
           <section id="coupling">
             <h1>Coupling Matrix</h1>
             <p>
-              The coupling matrix describes the interaction between different
-              quantum states or modes. It is essential for understanding the
-              dynamics of quantum systems and their evolution over time.
+              A coupling between two states is a higher dimension system that
+              reduces to the original states when one look at the marginal, but
+              contains some more information in the correlations. When both
+              states are Gaussian, the coupling is Gaussian too and as such, is
+              described by a covariance matrix. The coupling matrix is essential
+              in the calculation of some quantities such as the Wasserstein
+              distance.
             </p>
             <p>
-              Let us assume we have two states $A$ and $B$ and they respect the
-              uncertainty principle given by:
+              Let us assume we have two states represented by covariances
+              matrices $A$ and $B$, each satisfying the uncertainty principle
+              and let us define
             </p>
+            <p>\[A^\pm = A \pm \frac{i\Omega}{2}\]</p>
             <p>
-              \[A^\pm = A \pm \frac{i\Omega}{2}, \Omega = \begin{bmatrix}0 & 1\\
-              -1 & 0 \end{bmatrix}\]
-            </p>
-            <p>
-              The coupling matrix is a $4\times4$ matrix that describes the
-              interaction between the two states. It is defined as:
+              and similarly for $B^\pm$. The coupling matrix is a $4\times4$
+              matrix that describes the interaction between the two states. It
+              is defined as:
             </p>
             <p>
               \[ \gamma\Pi = \begin{bmatrix} A & X^T\\ X & B \end{bmatrix} \]
             </p>
+            <p>where $X$ can be anything as long as it verifies:</p>
+            <p>\[X^T A^{-1} X \le B\]</p>
             <p>
-              where $X$ is the covariance matrix of the two states given by:
-            </p>
-            <p>\[|X| \le \sqrt{\sqrt{A^\pm}\times B\times\sqrt{A^\pm}}\]</p>
-            <p>
-              With the coupling matrix, we can analyse the interactions between
-              the two states and how they influence each other. It shows the
-              degree to which changes in one state affects the other state.
+              (which is just an expression of the uncertainty principle). With
+              the coupling matrix, we can analyse the possible interactions
+              between the two states and how they influence each other.
             </p>
             <p>
-              The image below shows a 3D plot of a coupling matrix. The two
-              states $A$ and $B$ each respect the uncertainty principle. The $X$
-              and $Y$ axes represent the basis states, and the $Z$ axis
-              represents the coupling strength between the two states. The color
-              gradient indicates the degree of coupling, with darker colors
-              representing stronger interactions.
+              The image below shows a 3D plot of a coupling matrix. The $X$ and
+              $Y$ axes represent the basis states, and the $Z$ axis represents
+              the coupling strength between the two states. The color gradient
+              indicates the degree of coupling, with darker colors representing
+              stronger interactions.
+            </p>
+            <p>
+              Here, the position variable is represented by the letter $Q$ and
+              the momentum by the letter $P$. The first system is described by
+              the covariance matrix $A$ and the second by the covariance matrix
+              $B$.
             </p>
             <p>
               <img src="/images/coupling.png" alt="Coupling Matrix" />
@@ -218,16 +255,20 @@
               The Wasserstein distance is a metric used to measure the distance
               between two probability distributions. In the context of quantum
               mechanics, it can be used to quantify the differences between
-              quantum states represented by their Wigner functions.
+              quantum states represented by their Wigner functions. The
+              Wasserstein distance is the result of an optimization over all
+              possible couplings between the two states. When both states are
+              Gaussian, the Wasserstein distance is defined as
             </p>
             <p>
-              \[ W(\rho_A, \rho_B)^2 = \frac{1}{2}TrA+\frac{1}{2}TrB-Tr[X] \]
+              \[ W(\rho_A, \rho_B)^2 =
+              \frac{1}{2}TrA+\frac{1}{2}TrB-Tr[X_\text{optimal}] \]
             </p>
             <p>
               where $A$ and $B$ are the covariance matrices of the two states,
-              and $X$ is given by:
+              and $X_\text{optimal}$ is given by:
             </p>
-            <p>\[|X| \le \sqrt{\sqrt{A^\pm}\times B\times\sqrt{A^\pm}}\]</p>
+            <p>\[|X| = \sqrt{\sqrt{A^\pm}B^{\mp}\sqrt{A^\pm}}\]</p>
             <p>
               The Wasserstein distance is a powerful tool for comparing quantum
               states and analyzing their properties. It is particularly useful
