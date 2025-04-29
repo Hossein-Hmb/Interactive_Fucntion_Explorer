@@ -68,25 +68,14 @@ def wigner_gaussian4D(x1, p1, x2, p2, gamma):
     det = np.linalg.det(gamma)
     inv = np.linalg.inv(gamma)
 
-    # Check if the covariance matrix satisfies the uncertainty principle
-    if uncertainty4D(gamma) and det >= 0.25:
-        # Calculate the normalization factor
-        norm = 1 / ((2 * np.pi)**2 * np.sqrt(det))
-        # Calculate the exponent term
-        exponent = -0.5 * vec_r_t @ inv @ vec_r
+    # Calculate the normalization factor
+    norm = 1 / ((2 * np.pi)**2 * np.sqrt(det))
+    # Calculate the exponent term
+    exponent = -0.5 * vec_r_t @ inv @ vec_r
 
-        # Debugging prints for vector r and its transpose
-        # print(f"vec_r T: {vec_r_t.flatten()}")
-        # print("\n")
-        # print(f"vec_r: {vec_r}")
-        # print("\n")
-
-        # Return the Wigner function value
-        return norm * np.exp(exponent)
-    else:
-        # Return a message if the covariance matrix does not satisfy the uncertainty principle
-        return "Gamma doesn't respect uncertainty relation or det(gamma) < 1/4!"
-
+    # Return the Wigner function value
+    return norm * np.exp(exponent)
+        
 
 # Define the 2D Gaussian Wigner function
 def wigner_gaussian(x1, p1, gamma):
@@ -191,17 +180,15 @@ def minimal_coupling(A, B):
     We use X = sqrt( sqrt(A) * B * sqrt(A) ).
     """
     # Verify that matrices A & B respect the uncertainty principle
-    if uncertainty2D(A) and uncertainty2D(B):
-        # Compute the positive square root of A
-        sqrtA = sqrtm(A)
-        # Compute X = sqrt( sqrt(A) * B * sqrt(A) )
-        X = sqrtm(sqrtA @ B @ sqrtA)
-        # Clean up any tiny imaginary parts due to numerical precision
-        X = np.real_if_close(X)
-        return X
-    else:
-        # Display a message if matrices do not respect the uncertainty principle
-        st.write("Your Matrix Doesn't Respect the Uncertainty Relation 1")
+    
+    # Compute the positive square root of A
+    sqrtA = sqrtm(A)
+    # Compute X = sqrt( sqrt(A) * B * sqrt(A) )
+    X = sqrtm(sqrtA @ B @ sqrtA)
+    # Clean up any tiny imaginary parts due to numerical precision
+    X = np.real_if_close(X)
+    return X
+    
 
 
 # Calculate the Wasserstein distance between two covariance matrices
@@ -236,7 +223,7 @@ elif equation_type == "Gaussian Wigner Function 2D":
 
 elif equation_type == "Gaussian Wigner Function 4D":
     st.sidebar.latex(
-        r"W(r) = \frac{1}{2\pi\sqrt{\det(\gamma)}} e^{-\frac{1}{2}r^T \gamma^{-1} r}")
+        r"W(r) = \frac{1}{{(2\pi)}^2\sqrt{\det(\gamma)}} e^{-\frac{1}{2}r^T \gamma^{-1} r}")
     st.sidebar.write("where r = (x,p) and γ is the covariance matrix")
 
 elif equation_type == "Coupling Matrix":
@@ -250,11 +237,6 @@ elif equation_type == "Wasserstein Distance":
         "The Wasserstein distance measures the difference between two covariance matrices.")
 
 
-# Add a section for custom equation input (coming soon)
-st.sidebar.markdown("---")
-st.sidebar.subheader("Custom Equation")
-st.sidebar.write("Coming soon: Add your own equation")
-
 # Add instructions for using the app
 st.sidebar.markdown("---")
 with st.sidebar.expander("Instructions"):
@@ -265,6 +247,11 @@ with st.sidebar.expander("Instructions"):
     4. Change plot type or colormap as needed
     5. For Wigner Function, you can download the data as CSV
     """)
+
+# Add version information
+st.sidebar.markdown("---")
+st.sidebar.subheader("Version")
+st.sidebar.write("v0.1.1")
 
 # Main content area for displaying plots and results
 if equation_type == "Wigner Function (n) Fock States":
@@ -543,79 +530,85 @@ elif equation_type == "Gaussian Wigner Function 4D":
         covar_matrix = np.block([[co1, co2], [co3, co4]])
         gamma = np.block([[matrix_A, covar_matrix],
                           [covar_matrix, matrix_B]])
+        
+        # Check if the covariance matrix satisfies the uncertainty relation
+        if np.linalg.det(matrix_A) < 0.25 or np.linalg.det(matrix_B) < 0.25:
+            st.warning(
+                "Error: Current values of matrix A and/or matrix B do not form a valid covariance matrix that satisfies the uncertainty relation. Please adjust parameters.")
+            
+        else:
+            # Display the current vector r
+            st.subheader("Current Vector r")
+            st.dataframe(pd.DataFrame(vector_r, index=[
+                "x1", "p1", "x2", "p2"], columns=["Value"]))
 
-        # Display the current vector r
-        st.subheader("Current Vector r")
-        st.dataframe(pd.DataFrame(vector_r, index=[
-            "x1", "p1", "x2", "p2"], columns=["Value"]))
+            # Calculate the Wigner function value at the current vector r
+            result = wigner_gaussian4D(
+                vecr_x1, vecr_p1, vecr_x2, vecr_p2, gamma)
+            st.subheader("Wigner Function Value at r")
+            st.write(result)
 
-        # Calculate the Wigner function value at the current vector r
-        result = wigner_gaussian4D(
-            vecr_x1, vecr_p1, vecr_x2, vecr_p2, gamma)
-        st.subheader("Wigner Function Value at r")
-        st.write(result)
+            st.subheader("Matrix A Visualization")
+            # Display matrix A as a dataframe
+            st.dataframe(pd.DataFrame(matrix_A, columns=[
+                "x", "p"], index=["x", "p"]))
 
-        st.subheader("Matrix A Visualization")
-        # Display matrix A as a dataframe
-        st.dataframe(pd.DataFrame(matrix_A, columns=[
-            "x", "p"], index=["x", "p"]))
+            st.subheader("Matrix B Visualization")
+            # Display matrix B as a dataframe
+            st.dataframe(pd.DataFrame(matrix_B, columns=[
+                "x", "p"], index=["x", "p"]))
 
-        st.subheader("Matrix B Visualization")
-        # Display matrix B as a dataframe
-        st.dataframe(pd.DataFrame(matrix_B, columns=[
-            "x", "p"], index=["x", "p"]))
+            # Display the current covariance matrix γ
+            st.subheader("Current Covariance Matrix γ")
+            st.dataframe(pd.DataFrame(gamma, columns=[
+                        "x1", "p1", "x2", "p2"], index=["x1", "p1", "x2", "p2"]))
 
-        # Display the current covariance matrix γ
-        st.subheader("Current Covariance Matrix γ")
-        st.dataframe(pd.DataFrame(gamma, columns=[
-                     "x1", "p1", "x2", "p2"], index=["x1", "p1", "x2", "p2"]))
+            # Plot the Wigner function based on the selected view mode
+            if view_mode == "2D Slice":
+                st.subheader(
+                    f"Wigner Function Slice: {slice_axes[0]} vs {slice_axes[1]}")
+                resolution = 100
+                axis_vals = np.linspace(-3, 3, resolution)
+                X, Y = np.meshgrid(axis_vals, axis_vals)
+                Z = np.zeros_like(X)
 
-        # Plot the Wigner function based on the selected view mode
-        if view_mode == "2D Slice":
-            st.subheader(
-                f"Wigner Function Slice: {slice_axes[0]} vs {slice_axes[1]}")
-            resolution = 100
-            axis_vals = np.linspace(-3, 3, resolution)
-            X, Y = np.meshgrid(axis_vals, axis_vals)
-            Z = np.zeros_like(X)
+                # Evaluate the Wigner function on the grid for the selected slice
+                for i in range(resolution):
+                    for j in range(resolution):
+                        coords = {"x1": vecr_x1, "p1": vecr_p1,
+                                "x2": vecr_x2, "p2": vecr_p2}
+                        coords[slice_axes[0]] = X[i, j]
+                        coords[slice_axes[1]] = Y[i, j]
+                        Z[i, j] = wigner_gaussian4D(
+                            coords["x1"], coords["p1"], coords["x2"], coords["p2"], gamma
+                        )
 
-            # Evaluate the Wigner function on the grid for the selected slice
-            for i in range(resolution):
-                for j in range(resolution):
-                    coords = {"x1": vecr_x1, "p1": vecr_p1,
-                              "x2": vecr_x2, "p2": vecr_p2}
-                    coords[slice_axes[0]] = X[i, j]
-                    coords[slice_axes[1]] = Y[i, j]
-                    Z[i, j] = wigner_gaussian4D(
-                        coords["x1"], coords["p1"], coords["x2"], coords["p2"], gamma
-                    )
+                # Create a contour plot for the selected slice
+                fig, ax = plt.subplots(figsize=(8, 6))
+                contour = ax.contourf(X, Y, Z, cmap=colormap, levels=50)
+                plt.colorbar(contour, ax=ax)
+                ax.set_xlabel(slice_axes[0])
+                ax.set_ylabel(slice_axes[1])
+                st.pyplot(fig)
 
-            # Create a contour plot for the selected slice
-            fig, ax = plt.subplots(figsize=(8, 6))
-            contour = ax.contourf(X, Y, Z, cmap=colormap, levels=50)
-            plt.colorbar(contour, ax=ax)
-            ax.set_xlabel(slice_axes[0])
-            ax.set_ylabel(slice_axes[1])
-            st.pyplot(fig)
+            elif view_mode == "3D Plot":
+                st.subheader(
+                    f"Interactive Wigner Function 3D Surface: {slice_axes[0]} vs {slice_axes[1]}")
+                resolution = 100
+                axis_vals = np.linspace(-3, 3, resolution)
+                X, Y = np.meshgrid(axis_vals, axis_vals)
+                Z = np.zeros_like(X)
 
-        elif view_mode == "3D Plot":
-            st.subheader(
-                f"Interactive Wigner Function 3D Surface: {slice_axes[0]} vs {slice_axes[1]}")
-            resolution = 100
-            axis_vals = np.linspace(-3, 3, resolution)
-            X, Y = np.meshgrid(axis_vals, axis_vals)
-            Z = np.zeros_like(X)
-
-            # Evaluate the Wigner function on the grid for the 3D plot
-            for i in range(resolution):
-                for j in range(resolution):
-                    coords = {"x1": vecr_x1, "p1": vecr_p1,
-                              "x2": vecr_x2, "p2": vecr_p2}
-                    coords[slice_axes[0]] = X[i, j]
-                    coords[slice_axes[1]] = Y[i, j]
-                    Z[i, j] = wigner_gaussian4D(
-                        coords["x1"], coords["p1"], coords["x2"], coords["p2"], gamma
-                    )
+                # Evaluate the Wigner function on the grid for the 3D plot
+                for i in range(resolution):
+                    for j in range(resolution):
+                        coords = {"x1": vecr_x1, "p1": vecr_p1,
+                                "x2": vecr_x2, "p2": vecr_p2}
+                        coords[slice_axes[0]] = X[i, j]
+                        coords[slice_axes[1]] = Y[i, j]
+                        Z[i, j] = wigner_gaussian4D(
+                            coords["x1"], coords["p1"], coords["x2"], coords["p2"], gamma
+                        )
 
             # Create a 3D surface plot for the selected slice
             fig = go.Figure(
@@ -630,25 +623,25 @@ elif equation_type == "Gaussian Wigner Function 4D":
             )
             st.plotly_chart(fig)
 
-        st.subheader("Wasserstein Distance Visualization")
-        # Compute the Wasserstein distance between matrix A and matrix B
-        distance = wasserstein_distance(matrix_A, matrix_B)
-        max_range = distance * 1.2 if distance > 0 else 1.0
-        # Create an interactive gauge indicator for the Wasserstein distance
-        fig_wasser = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=distance,
-            title={"text": "Wasserstein Distance"},
-            gauge={
-                "axis": {"range": [None, max_range]},
-                "bar": {"color": "darkblue"},
-                "steps": [
-                    {"range": [0, max_range*0.5], "color": "lightgray"},
-                    {"range": [max_range*0.5, max_range], "color": "gray"}
-                ]
-            }
-        ))
-        st.plotly_chart(fig_wasser)
+            st.subheader("Wasserstein Distance Visualization")
+            # Compute the Wasserstein distance between matrix A and matrix B
+            distance = wasserstein_distance(matrix_A, matrix_B)
+            max_range = distance * 1.2 if distance > 0 else 1.0
+            # Create an interactive gauge indicator for the Wasserstein distance
+            fig_wasser = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=distance,
+                title={"text": "Wasserstein Distance"},
+                gauge={
+                    "axis": {"range": [None, max_range]},
+                    "bar": {"color": "darkblue"},
+                    "steps": [
+                        {"range": [0, max_range*0.5], "color": "lightgray"},
+                        {"range": [max_range*0.5, max_range], "color": "gray"}
+                    ]
+                }
+            ))
+            st.plotly_chart(fig_wasser)
 
 elif equation_type == "Wasserstein Distance":
     # Create two columns for layout
