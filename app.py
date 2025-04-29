@@ -111,7 +111,7 @@ def wigner_gaussian(x1, p1, gamma):
 
     # Check if the covariance matrix satisfies the uncertainty principle
     # For 2D, the uncertainty relation is det(gamma) >= 1/4
-    if uncertainty2D(gamma) and det >= 0.25:
+    if det >= 0.25:
         # Calculate the normalization factor
         norm = 1 / (2 * np.pi * np.sqrt(det))
         # Calculate the exponent term
@@ -352,8 +352,8 @@ elif equation_type == "Gaussian Wigner Function 2D":
     with col1:
         st.subheader("Covariance Matrix")
         # Sliders for setting the covariance matrix elements
-        covar_xx = st.slider("Var(x)", -3.0, 3.0, 0.5, 0.1)
-        covar_pp = st.slider("Var(p)", -3.0, 3.0, 0.5, 0.1)
+        covar_xx = st.slider("Var(x)", 0.1, 3.0, 0.5, 0.1)
+        covar_pp = st.slider("Var(p)", 0.1, 3.0, 0.5, 0.1)
         covar_xp = st.slider("Cov(x,p)", -1.0, 1.0, 0.0, 0.1)
 
         # Slider for selecting the resolution of the plot
