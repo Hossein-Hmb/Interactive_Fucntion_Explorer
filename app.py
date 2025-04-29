@@ -251,7 +251,7 @@ with st.sidebar.expander("Instructions"):
 # Add version information
 st.sidebar.markdown("---")
 st.sidebar.subheader("Version")
-st.sidebar.write("v0.1.1")
+st.sidebar.write("v0.1.2")
 
 # Main content area for displaying plots and results
 if equation_type == "Wigner Function (n) Fock States":
@@ -651,14 +651,14 @@ elif equation_type == "Wasserstein Distance":
     with col1:
         st.subheader("Matrix A")
         # Sliders for setting the covariance matrix elements of matrix A
-        A_xx = st.slider("A[0,0]", 0.1, 3.0, 1.0, 0.1)
-        A_pp = st.slider("A[1,1]", 0.1, 3.0, 1.0, 0.1)
+        A_xx = st.slider("A[0,0]", 0.0, 3.0, 1.0, 0.1)
+        A_pp = st.slider("A[1,1]", 0.0, 3.0, 1.0, 0.1)
         A_xp = st.slider("A[0,1] and A[1,0]", -1.0, 1.0, 0.0, 0.1)
 
         st.subheader("Matrix B")
         # Sliders for setting the covariance matrix elements of matrix B
-        B_xx = st.slider("B[0,0]", 0.1, 3.0, 1.0, 0.1)
-        B_pp = st.slider("B[1,1]", 0.1, 3.0, 1.0, 0.1)
+        B_xx = st.slider("B[0,0]", 0.0, 3.0, 1.0, 0.1)
+        B_pp = st.slider("B[1,1]", 0.0, 3.0, 1.0, 0.1)
         B_xp = st.slider("B[0,1] and B[1,0]", -1.0, 1.0, 0.0, 0.1)
 
     # Contents of the second column
@@ -673,25 +673,27 @@ elif equation_type == "Wasserstein Distance":
 
         st.subheader("Matrix B")
         st.write(matrix_B)
+        if np.linalg.det(matrix_A) < 0.25 or np.linalg.det(matrix_B) < 0.25:
+            st.warning("Error: Current values of matrix A and/or matrix B do not form a valid covariance matrix that satisfies the uncertainty relation. Please adjust parameters.")
+        else:
+            # Calculate the Wasserstein distance between matrices A and B
+            distance = wasserstein_distance(matrix_A, matrix_B)
 
-        # Calculate the Wasserstein distance between matrices A and B
-        distance = wasserstein_distance(matrix_A, matrix_B)
+            # Determine a dynamic maximum range for the gauge based on the computed distance
+            max_range = distance * 1.2 if distance > 0 else 1.0
 
-        # Determine a dynamic maximum range for the gauge based on the computed distance
-        max_range = distance * 1.2 if distance > 0 else 1.0
-
-        # Create an improved interactive gauge indicator for Wasserstein Distance
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=distance,
-            title={"text": "Wasserstein Distance"},
-            gauge={
-                "axis": {"range": [None, max_range]},
-                "bar": {"color": "darkblue"},
-                "steps": [
-                    {"range": [0, max_range*0.5], "color": "lightgray"},
-                    {"range": [max_range*0.5, max_range], "color": "gray"}
-                ]
-            }
-        ))
-        st.plotly_chart(fig)
+            # Create an improved interactive gauge indicator for Wasserstein Distance
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=distance,
+                title={"text": "Wasserstein Distance"},
+                gauge={
+                    "axis": {"range": [None, max_range]},
+                    "bar": {"color": "darkblue"},
+                    "steps": [
+                        {"range": [0, max_range*0.5], "color": "lightgray"},
+                        {"range": [max_range*0.5, max_range], "color": "gray"}
+                    ]
+                }
+            ))
+            st.plotly_chart(fig)
