@@ -109,19 +109,14 @@ def wigner_gaussian(x1, p1, gamma):
     det = np.linalg.det(gamma)
     inv = np.linalg.inv(gamma)
 
-    # Check if the covariance matrix satisfies the uncertainty principle
-    # For 2D, the uncertainty relation is det(gamma) >= 1/4
-    if det >= 0.25:
-        # Calculate the normalization factor
-        norm = 1 / (2 * np.pi * np.sqrt(det))
-        # Calculate the exponent term
-        exponent = -0.5 * vec_r_t @ inv @ vec_r
-        # Return the Wigner function value
-        return norm * np.exp(exponent)
+    # Calculate the normalization factor
+    norm = 1 / (2 * np.pi * np.sqrt(det))
+    # Calculate the exponent term
+    exponent = -0.5 * vec_r_t @ inv @ vec_r
+    # Return the Wigner function value
+    return norm * np.exp(exponent)
 
-    else:
-        # Return a message if the covariance matrix does not satisfy the uncertainty principle
-        return "Gamma doesn't respect uncertainty relation or det(gamma) < 1/4!"
+   
 
 
 # Check if a 4x4 covariance matrix satisfies the uncertainty principle
@@ -373,50 +368,51 @@ elif equation_type == "Gaussian Wigner Function 2D":
         # Construct the covariance matrix from the slider values
         covar_mx = np.array([[covar_xx, covar_xp], [covar_xp, covar_pp]])
 
-        # Check if the covariance matrix is positive-definite
-        if np.linalg.det(covar_mx) <= 0:
+        # Check if the covariance matrix satisfies the uncertainty relation 
+        if np.linalg.det(covar_mx) < 0.25:
             st.warning(
-                "Warning: Current values do not form a valid covariance matrix. Please adjust parameters.")
-
-        # Display the covariance matrix
-        st.write("Covariance Matrix:")
-        st.write(covar_mx)
-
-        # Set up a grid over phase space (x and p) using the selected resolution and range
-        x_vals = np.linspace(x_range[0], x_range[1], resolution)
-        p_vals = np.linspace(p_range[0], p_range[1], resolution)
-        X, P = np.meshgrid(x_vals, p_vals)
-
-        # Evaluate the Wigner function on the grid
-        Z = np.zeros_like(X)
-        for i in range(resolution):
-            for j in range(resolution):
-                coords = {"x": X[i, j], "p": P[i, j]}
-                # Calculate the Wigner function value at the current coordinates
-                Z[i, j] = wigner_gaussian(coords["x"], coords["p"], covar_mx)
-
-        # Plot the Wigner function as a surface or contour plot
-        if plot_type == "Surface":
-            fig = go.Figure(
-                data=[go.Surface(x=X, y=P, z=Z, colorscale=colormap)])
-            fig.update_layout(
-                title="Gaussian Wigner Function",
-                scene=dict(
-                    xaxis_title="x",
-                    yaxis_title="p",
-                    zaxis_title="Wigner Function"
-                )
-            )
-            st.plotly_chart(fig)
+                "Error: Current values do not form a valid covariance matrix that satisfies the uncertainty relation. Please adjust parameters.")
+            
         else:
-            fig = plt.figure(figsize=(10, 8))
-            ax = fig.add_subplot(111)
-            contour = ax.contourf(X, P, Z, cmap=colormap, levels=50)
-            plt.colorbar(contour, ax=ax)
-            ax.set_xlabel("x")
-            ax.set_ylabel("p")
-            ax.set_title("Gaussian Wigner Function")
-            st.pyplot(fig)
+            # Display the covariance matrix
+            st.write("Covariance Matrix:")
+            st.write(covar_mx)
+
+            # Set up a grid over phase space (x and p) using the selected resolution and range
+            x_vals = np.linspace(x_range[0], x_range[1], resolution)
+            p_vals = np.linspace(p_range[0], p_range[1], resolution)
+            X, P = np.meshgrid(x_vals, p_vals)
+
+            # Evaluate the Wigner function on the grid
+            Z = np.zeros_like(X)
+            for i in range(resolution):
+                for j in range(resolution):
+                    coords = {"x": X[i, j], "p": P[i, j]}
+                    # Calculate the Wigner function value at the current coordinates
+                    Z[i, j] = wigner_gaussian(coords["x"], coords["p"], covar_mx)
+
+            # Plot the Wigner function as a surface or contour plot
+            if plot_type == "Surface":
+                fig = go.Figure(
+                    data=[go.Surface(x=X, y=P, z=Z, colorscale=colormap)])
+                fig.update_layout(
+                    title="Gaussian Wigner Function",
+                    scene=dict(
+                        xaxis_title="x",
+                        yaxis_title="p",
+                        zaxis_title="Wigner Function"
+                    )
+                )
+                st.plotly_chart(fig)
+            else:
+                fig = plt.figure(figsize=(10, 8))
+                ax = fig.add_subplot(111)
+                contour = ax.contourf(X, P, Z, cmap=colormap, levels=50)
+                plt.colorbar(contour, ax=ax)
+                ax.set_xlabel("x")
+                ax.set_ylabel("p")
+                ax.set_title("Gaussian Wigner Function")
+                st.pyplot(fig)
 
 elif equation_type == "Coupling Matrix":
     # Create two columns for layout
