@@ -334,8 +334,8 @@ elif equation_type == "Gaussian Wigner Function 2D":
     with col1:
         st.subheader("Covariance Matrix")
         # Sliders for setting the covariance matrix elements
-        covar_xx = st.slider("Var(x)", 0.1, 3.0, 0.5, 0.1)
-        covar_pp = st.slider("Var(p)", 0.1, 3.0, 0.5, 0.1)
+        covar_xx = st.slider("Var(x)", 0.0, 3.0, 0.5, 0.1)
+        covar_pp = st.slider("Var(p)", 0.0, 3.0, 0.5, 0.1)
         covar_xp = st.slider("Cov(x,p)", -1.0, 1.0, 0.0, 0.1)
 
         # Slider for selecting the resolution of the plot
@@ -409,14 +409,14 @@ elif equation_type == "Coupling Matrix":
     with col1:
         st.subheader("State 1 Covariance Matrix")
         # Sliders for setting the covariance matrix elements of state 1
-        gamma1_xx = st.slider("γ1 Var(x)", -3.0, 3.0, 0.5, 0.1)
-        gamma1_pp = st.slider("γ1 Var(p)", -3.0, 3.0, 0.5, 0.1)
+        gamma1_xx = st.slider("γ1 Var(x)", 0.0, 3.0, 0.5, 0.1)
+        gamma1_pp = st.slider("γ1 Var(p)", 0.0, 3.0, 0.5, 0.1)
         gamma1_xp = st.slider("γ1 Cov(x,p)", -1.0, 1.0, 0.5, 0.1)
 
         st.subheader("State 2 Covariance Matrix")
         # Sliders for setting the covariance matrix elements of state 2
-        gamma2_xx = st.slider("γ2 Var(x)", -3.0, 3.0, 0.5, 0.1)
-        gamma2_pp = st.slider("γ2 Var(p)", -3.0, 3.0, 0.5, 0.1)
+        gamma2_xx = st.slider("γ2 Var(x)", 0.0, 3.0, 0.5, 0.1)
+        gamma2_pp = st.slider("γ2 Var(p)", 0.0, 3.0, 0.5, 0.1)
         gamma2_xp = st.slider("γ2 Cov(x,p)", -1.0, 1.0, 0.3, 0.1)
 
         st.subheader("Coupling Matrix")
@@ -483,14 +483,14 @@ elif equation_type == "Gaussian Wigner Function 4D":
 
         st.subheader("Matrix A (Top-Left, State A)")
         # Sliders for setting the covariance matrix elements of matrix A
-        A_xx = st.slider("A[0,0] (Var x1)", 0.1, 3.0, 1.0, 0.1)
-        A_pp = st.slider("A[1,1] (Var p1)", 0.1, 3.0, 1.0, 0.1)
+        A_xx = st.slider("A[0,0] (Var x1)", 0.0, 3.0, 1.0, 0.1)
+        A_pp = st.slider("A[1,1] (Var p1)", 0.0, 3.0, 1.0, 0.1)
         A_xp = st.slider("A[0,1] and A[1,0] (Cov x1,p1)", -1.0, 1.0, 0.0, 0.1)
 
         st.subheader("Matrix B (Bottom-Right, State B)")
         # Sliders for setting the covariance matrix elements of matrix B
-        B_xx = st.slider("B[0,0] (Var x2)", 0.1, 3.0, 1.0, 0.1)
-        B_pp = st.slider("B[1,1] (Var p2)", 0.1, 3.0, 1.0, 0.1)
+        B_xx = st.slider("B[0,0] (Var x2)", 0.0, 3.0, 1.0, 0.1)
+        B_pp = st.slider("B[1,1] (Var p2)", 0.0, 3.0, 1.0, 0.1)
         B_xp = st.slider("B[0,1] and B[1,0] (Cov x2,p2)", -1.0, 1.0, 0.0, 0.1)
 
         st.subheader("Covariances (Bottom-Left, Top-Right)")
